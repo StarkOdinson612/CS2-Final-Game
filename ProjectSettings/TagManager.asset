@@ -9,10 +9,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - EnemyVision
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
@@ -47,4 +47,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 4046585507
+    locked: 0
+  - name: Enemy
+    uniqueID: 3820814739
     locked: 0
