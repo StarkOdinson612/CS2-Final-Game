@@ -23,22 +23,21 @@ public class EnemyVision : MonoBehaviour
         
     }
 
-	private void OnTriggerEnter2D(Collider2D collider)
-	{
-		if (collider.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("vis");
-            StartCoroutine(HangTimeWait());
-
-            if (thisCollider.IsTouching(collider))
-            {
-                Debug.Log("Caught ya!");
-            }
-        }
-	}
-
-    IEnumerator HangTimeWait()
+	void FixedUpdate()
     {
-        yield return new WaitForSeconds(hangTime);
+        for (float angle = -30; angle <= 30; angle += 1)
+        {
+            Debug.DrawRay(transform.position, transform.position + DirFromAngle(angle, false), Color.cyan, 0.01f);
+        }
+    }
+
+    public Vector3 DirFromAngle(float angleInDegree, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleInDegree += transform.eulerAngles.y;
+        }
+
+        return new Vector3(Mathf.Sin(angleInDegree * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegree * Mathf.Deg2Rad));
     }
 }

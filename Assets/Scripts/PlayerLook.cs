@@ -19,7 +19,7 @@ public class PlayerLook : MonoBehaviour
         Vector3 mousePos = new Vector3(cam.ScreenToWorldPoint(Input.mousePosition).x, cam.ScreenToWorldPoint(Input.mousePosition).y, 0);
         Vector3 shootDir = mousePos - new Vector3(transform.position.x, transform.position.y, 0);
 
-        lookIndicator.SetLocalPositionAndRotation(new Vector3(shootDir.x, shootDir.y, transform.position.z).normalized * 1f, Quaternion.Euler(new Vector3(0,0,AngleBetweenVector3(transform.position, mousePos))));
+        lookIndicator.SetLocalPositionAndRotation(new Vector3(0,0,0).normalized, Quaternion.Euler(new Vector3(0,0,AngleBetweenVector3(transform.position, mousePos))));
         
     }
 
