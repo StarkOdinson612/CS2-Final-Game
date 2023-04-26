@@ -35,7 +35,8 @@ public class EnemyPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (stateManager.getState() == EnemyState.PATROLLING)
+        EnemyState state = stateManager.getState();
+        if (state == EnemyState.PATROLLING)
         {
             dir = points[currentDestPoint].position - transform.position;
             float dirAngle = GetAngleFromVectorFloat(dir);
@@ -53,6 +54,14 @@ public class EnemyPatrol : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, points[currentDestPoint].position, moveSpeed * Time.deltaTime);
             }
         }
+        else if (state == EnemyState.DISCOVERED_PLAYER || state == EnemyState.CAUGHT_PLAYER)
+        {
+
+			float dirAngle = GetAngleFromVectorFloat(stateManager.getPlayerPos().position - transform.position);
+
+			Quaternion rotDir = Quaternion.Euler(new Vector3(0, 0, dirAngle - transform.rotation.z - 90));
+			transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, 1 * Time.deltaTime);
+		}
     }
 
     IEnumerator NextTargetLocation()

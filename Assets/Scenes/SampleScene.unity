@@ -359,7 +359,7 @@ GameObject:
   - component: {fileID: 221789465}
   - component: {fileID: 221789467}
   - component: {fileID: 221789466}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -492,7 +492,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -753,6 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94f9986f0e9aee48bee0f3fcd83898c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisState: 0
 --- !u!60 &563472370
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -905,8 +906,8 @@ MonoBehaviour:
   - {x: -0.0589199, y: -0.05048064, z: 0}
   - {x: -0.05975826, y: -0.030359354, z: 0}
   m_ShapePathHash: -1231003568
-  m_Mesh: {fileID: 2034195031}
-  m_InstanceId: -62210
+  m_Mesh: {fileID: 1950316883}
+  m_InstanceId: 27978
 --- !u!114 &563472373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -920,6 +921,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hangTime: 7
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &619004147
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,7 +933,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 619004148}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Lighting Systems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -990,7 +994,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 
+  m_ApplyToSortingLayers: 00000000f528209ca3fe31f19301bde3
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 1
@@ -1074,7 +1078,7 @@ GameObject:
   m_Component:
   - component: {fileID: 742886233}
   - component: {fileID: 742886234}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: PlayerSpotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1125,7 +1129,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowIntensityEnabled: 0
+  m_ShadowIntensityEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
@@ -1185,7 +1189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 854642237}
   - component: {fileID: 854642238}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Flashlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1380,7 +1384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1573718798}
   - component: {fileID: 1573718799}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1579,9 +1583,9 @@ MonoBehaviour:
   - {x: 0.31254005, y: -0.40045953, z: 0}
   - {x: 0.09167671, y: -0.4974239, z: 0}
   m_ShapePathHash: -1694160769
-  m_Mesh: {fileID: 2011426218}
-  m_InstanceId: 28014
---- !u!43 &2011426218
+  m_Mesh: {fileID: 1836451544}
+  m_InstanceId: 28024
+--- !u!43 &1836451544
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1745,7 +1749,7 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!43 &2034195031
+--- !u!43 &1950316883
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1923,9 +1927,9 @@ GameObject:
   - component: {fileID: 2050171168}
   - component: {fileID: 2050171173}
   - component: {fileID: 2050171174}
-  - component: {fileID: 2050171176}
   - component: {fileID: 2050171175}
   - component: {fileID: 2050171177}
+  - component: {fileID: 2050171178}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2009,15 +2013,15 @@ SpriteRenderer:
   m_SortingLayerID: -248381789
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: -318947768, guid: 0e0a21dbf5dcfb447a8509df98e5b45d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.12, y: 0.17}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &2050171172
@@ -2081,8 +2085,8 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.12, y: 0.17}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 0.12, y: 0.18}
+    newSize: {x: 0.12, y: 0.17}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -2097,26 +2101,6 @@ PolygonCollider2D:
       - {x: 0.06, y: -0.055}
       - {x: 0.06, y: 0.055}
       - {x: 0.03, y: 0.085}
---- !u!95 &2050171176
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2050171167}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: da8757d14207c6147a80fd119002dcb1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2050171177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2196,3 +2180,23 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!95 &2050171178
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050171167}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: da8757d14207c6147a80fd119002dcb1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
