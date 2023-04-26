@@ -56,12 +56,12 @@ public class EnemyVision : MonoBehaviour
 			viewCounter++;
 			Debug.Log(viewCounter / 60);
 
-			if (viewCounter / 60 > 1)
+			if (viewCounter / 60 > 3)
 			{
 				stateManager.setState(EnemyState.CAUGHT_PLAYER);
 			}
 		}
-		else { viewCounter = 0; }
+		else { viewCounter = 0; stateManager.setState(EnemyState.PATROLLING); }
 	}
 
     public Vector3 DirFromAngle(float angleInDegree, bool angleIsGlobal)
