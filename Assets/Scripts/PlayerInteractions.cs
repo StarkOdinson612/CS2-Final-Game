@@ -6,6 +6,8 @@ public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField]
     private bool hasKeyCard;
+    [SerializeField]
+    private GameObject keyCardObj = null;
 
     public GameObject keyCardUIParent;
 
@@ -18,7 +20,14 @@ public class PlayerInteractions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (keyCardUIParent.active)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Destroy(keyCardObj);
+                hasKeyCard = true;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -26,8 +35,7 @@ public class PlayerInteractions : MonoBehaviour
         if (collision.gameObject.CompareTag("KeyCard"))
         {
             keyCardUIParent.SetActive(true);
-
-
+            keyCardObj = collision.gameObject;
         }
     }
 
@@ -35,12 +43,12 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("KeyCard"))
         {
-            StartCoroutine(PlayerInteractions.waitForTimeCustom(0.3f));
+            StartCoroutine(waitForTimeCustom(0.3f));
             keyCardUIParent.SetActive(false);
         }
     }
 
-    public static IEnumerator waitForTimeCustom(float seconds)
+    IEnumerator waitForTimeCustom(float seconds)
     {
         yield return new WaitForSeconds(seconds);
     }

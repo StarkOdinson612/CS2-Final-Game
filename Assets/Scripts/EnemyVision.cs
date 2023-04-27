@@ -24,7 +24,7 @@ public class EnemyVision : MonoBehaviour
     {
         stateManager = GetComponentInParent<EnemyStateManager>();
         thisCollider = GetComponentInParent<Collider2D>();
-        playerMask = LayerMask.GetMask("Player");
+        playerMask = LayerMask.GetMask("Player", "Default");
     }
 
     // Update is called once per frame
@@ -45,7 +45,7 @@ public class EnemyVision : MonoBehaviour
             hits.Add(Physics2D.Raycast(transform.position, transform.rotation * vec.normalized, 7, playerMask));
         }
 
-        hits = hits.Where(hit => hit.collider != null).ToList();
+        hits = hits.Where(hit => hit.collider != null && hit.collider.gameObject.CompareTag("Player")).ToList();
 
         if (hits.Count > 0)
         {
@@ -61,7 +61,7 @@ public class EnemyVision : MonoBehaviour
 				stateManager.setState(EnemyState.CAUGHT_PLAYER);
 			}
 		}
-		else { viewCounter = 0; stateManager.setState(EnemyState.PATROLLING); }
+		else { viewCounter = 0; if (state != EnemyState.CAUGHT_PLAYER) { stateManager.setState(EnemyState.PATROLLING); } }
 	}
 
     public Vector3 DirFromAngle(float angleInDegree, bool angleIsGlobal)

@@ -17,6 +17,8 @@ public class EnemyPatrol : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 1.5f;
 
+    public float stunDuration = 7;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +64,10 @@ public class EnemyPatrol : MonoBehaviour
 			Quaternion rotDir = Quaternion.Euler(new Vector3(0, 0, dirAngle - transform.rotation.z - 90));
 			transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, 1 * Time.deltaTime);
 		}
+        else if (state == EnemyState.STUNNED)
+        {
+            StartCoroutine(EnemyStunned());
+        }
     }
 
     IEnumerator NextTargetLocation()
@@ -85,6 +91,15 @@ public class EnemyPatrol : MonoBehaviour
 
         stateManager.setState(EnemyState.PATROLLING);
 
+    }
+    
+    IEnumerator EnemyStunned()
+    {
+        Quaternion previousRot = transform.rotation;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
+        yield return new WaitForSeconds(stunDuration);
+        //transform.rotation = previousRot;
+       // stateManager.setState(EnemyState.PATROLLING);
     }
 
 	public static float GetAngleFromVectorFloat(Vector3 dir)
