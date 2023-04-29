@@ -57,7 +57,7 @@ public class PlayerShoot : MonoBehaviour
 				
 				GameObject t_obj = Instantiate(lightningPrefab, transform);
 				GameObject hitEnemy = hits[0].collider.gameObject;
-				hitEnemy.GetComponent<EnemyStateManager>().setState(EnemyState.STUNNED);
+				StartCoroutine(hitEnemy.GetComponent<EnemyPatrol>().EnemyStunned());
 				StartCoroutine(InstantiateLightning(1, t_obj, hitEnemy));
 			}
 		}

@@ -49,19 +49,19 @@ public class EnemyVision : MonoBehaviour
 
         if (hits.Count > 0)
         {
-            Debug.Log(hits[0].collider.gameObject);
+            // Debug.Log(hits[0].collider.gameObject);
             if (state != EnemyState.CAUGHT_PLAYER && state != EnemyState.STUNNED) { stateManager.setState(EnemyState.DISCOVERED_PLAYER); }
 			stateManager.setPlayerPos(hits[0].collider.gameObject.transform);
 
-			viewCounter++;
-			Debug.Log(viewCounter / 60);
+            if (state != EnemyState.STUNNED) { viewCounter++; }
+			// Debug.Log(viewCounter / 60);
 
 			if (viewCounter / 60 > 3)
 			{
 				stateManager.setState(EnemyState.CAUGHT_PLAYER);
 			}
 		}
-		else { viewCounter = 0; if (state != EnemyState.CAUGHT_PLAYER) { stateManager.setState(EnemyState.PATROLLING); } }
+		else { viewCounter = 0; if (state != EnemyState.CAUGHT_PLAYER && state != EnemyState.STUNNED) { stateManager.setState(EnemyState.PATROLLING); } }
 	}
 
     public Vector3 DirFromAngle(float angleInDegree, bool angleIsGlobal)

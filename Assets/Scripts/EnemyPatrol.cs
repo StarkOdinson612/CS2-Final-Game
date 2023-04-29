@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
 
 public class EnemyPatrol : MonoBehaviour
 {
@@ -9,6 +9,8 @@ public class EnemyPatrol : MonoBehaviour
     private int currentDestPoint;
 
     private EnemyStateManager stateManager;
+
+    public Light2D enemyLight;
 
     public Vector3 dir;
 
@@ -66,7 +68,8 @@ public class EnemyPatrol : MonoBehaviour
 		}
         else if (state == EnemyState.STUNNED)
         {
-            StartCoroutine(EnemyStunned());
+            //Debug.Log("Detected Stun State");
+            enemyLight.intensity = Mathf.Lerp(enemyLight.intensity, 0.2f, 0.01f);
         }
     }
 
@@ -93,13 +96,22 @@ public class EnemyPatrol : MonoBehaviour
 
     }
     
-    IEnumerator EnemyStunned()
+    public IEnumerator EnemyStunned()
     {
-        Quaternion previousRot = transform.rotation;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-        yield return new WaitForSeconds(stunDuration);
-        //transform.rotation = previousRot;
-       // stateManager.setState(EnemyState.PATROLLING);
+        stateManager.setState(EnemyState.STUNNED);
+        yield return new WaitForSeconds(stunDuration );
+		enemyLight.intensity = 0.5f;
+		yield return new WaitForSeconds(0.2f);
+		enemyLight.intensity = 0.75f;
+		yield return new WaitForSeconds(0.2f);
+		enemyLight.intensity = 0.5f;
+		yield return new WaitForSeconds(0.2f);
+		enemyLight.intensity = 0.25f;
+        yield return new WaitForSeconds(0.2f);
+        enemyLight.intensity = 0.7f;
+        yield return new WaitForSeconds(0.4f);
+		stateManager.setState(EnemyState.PATROLLING);
+        enemyLight.intensity = 1;
     }
 
 	public static float GetAngleFromVectorFloat(Vector3 dir)
