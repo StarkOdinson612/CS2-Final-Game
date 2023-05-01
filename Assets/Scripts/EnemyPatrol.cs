@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
 
 public class EnemyPatrol : MonoBehaviour
 {
@@ -10,12 +10,16 @@ public class EnemyPatrol : MonoBehaviour
 
     private EnemyStateManager stateManager;
 
+    public Light2D enemyLight;
+
     public Vector3 dir;
 
     public float timeDelay = 1f;
 
     [SerializeField]
     private float moveSpeed = 1.5f;
+
+    public float stunDuration = 7;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +39,8 @@ public class EnemyPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (stateManager.getState() == EnemyState.PATROLLING)
+        EnemyState state = stateManager.getState();
+        if (state == EnemyState.PATROLLING)
         {
             dir = points[currentDestPoint].position - transform.position;
             float dirAngle = GetAngleFromVectorFloat(dir);
@@ -52,6 +57,19 @@ public class EnemyPatrol : MonoBehaviour
             {
                 transform.position = Vector2.MoveTowards(transform.position, points[currentDestPoint].position, moveSpeed * Time.deltaTime);
             }
+        }
+        else if (state == EnemyState.DISCOVERED_PLAYER || state == EnemyState.CAUGHT_PLAYER)
+        {
+
+			float dirAngle = GetAngleFromVectorFloat(stateManager.getPlayerPos().position - transform.position);
+
+			Quaternion rotDir = Quaternion.Euler(new Vector3(0, 0, dirAngle - transform.rotation.z - 90));
+			transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, 1 * Time.deltaTime);
+		}
+        else if (state == EnemyState.STUNNED)
+        {
+            //Debug.Log("Detected Stun State");
+            enemyLight.intensity = Mathf.Lerp(enemyLight.intensity, 0.2f, 0.01f);
         }
     }
 
@@ -76,6 +94,24 @@ public class EnemyPatrol : MonoBehaviour
 
         stateManager.setState(EnemyState.PATROLLING);
 
+    }
+    
+    public IEnumerator EnemyStunned()
+    {
+        stateManager.setState(EnemyState.STUNNED);
+        yield return new WaitForSeconds(stunDuration );
+		enemyLight.intensity = 0.5f;
+		yield return new WaitForSeconds(0.2f);
+		enemyLight.intensity = 0.75f;
+		yield return new WaitForSeconds(0.2f);
+		enemyLight.intensity = 0.5f;
+		yield return new WaitForSeconds(0.2f);
+		enemyLight.intensity = 0.25f;
+        yield return new WaitForSeconds(0.2f);
+        enemyLight.intensity = 0.7f;
+        yield return new WaitForSeconds(0.4f);
+		stateManager.setState(EnemyState.PATROLLING);
+        enemyLight.intensity = 1;
     }
 
 	public static float GetAngleFromVectorFloat(Vector3 dir)
