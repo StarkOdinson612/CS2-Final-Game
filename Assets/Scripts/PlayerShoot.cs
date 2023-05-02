@@ -68,7 +68,7 @@ public class PlayerShoot : MonoBehaviour
 		FollowTwoObj tScript = lightningObj.GetComponent<FollowTwoObj>();
 		tScript.obj = gameObject;
 		tScript.target = tObj;
-		yield return new WaitForSeconds(seconds);
+		yield return new WaitForSecondsRealtime(seconds);
 		Destroy(lightningObj);
 	}
 }
