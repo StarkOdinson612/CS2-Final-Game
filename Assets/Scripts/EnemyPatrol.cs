@@ -8,6 +8,8 @@ public class EnemyPatrol : MonoBehaviour
     public Transform[] points;
     private int currentDestPoint;
 
+    public Animator animator;
+
     private EnemyStateManager stateManager;
 
     public Light2D enemyLight;
@@ -21,9 +23,15 @@ public class EnemyPatrol : MonoBehaviour
 
     public float stunDuration = 7;
 
+    private float rotationZ;
+
+    private Rigidbody2D rb;
+
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+
         if (points.Length != 0)
         {
             currentDestPoint = 0;
@@ -36,9 +44,13 @@ public class EnemyPatrol : MonoBehaviour
         stateManager.setState(EnemyState.PATROLLING);
     }
 
-    // Update is called once per frame
-    void Update()
+	// Update is called once per frame
+	[System.Obsolete]
+	void Update()
     {
+        animator.SetFloat("rotation", transform.eulerAngles.z);
+        animator.SetFloat("move", rb.velocity.magnitude);
+        animator.SetFloat("rotationalV", Mathf.Abs(rb.angularVelocity));
         EnemyState state = stateManager.getState();
         if (state == EnemyState.PATROLLING)
         {
@@ -125,5 +137,12 @@ public class EnemyPatrol : MonoBehaviour
 		}
 
 		return n;
+	}
+
+	private float AngleBetweenVector3(Vector3 vec1, Vector3 vec2)
+	{
+		Vector3 diference = vec2 - vec1;
+		float sign = (vec2.y < vec1.y) ? -1.0f : 1.0f;
+		return Vector3.Angle(Vector3.right, diference) * sign - 90;
 	}
 }
