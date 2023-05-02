@@ -102,7 +102,7 @@ public class EnemyPatrol : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(timeDelay);
+        yield return new WaitForSecondsRealtime(timeDelay);
 
         stateManager.setState(EnemyState.PATROLLING);
 
@@ -111,17 +111,17 @@ public class EnemyPatrol : MonoBehaviour
     public IEnumerator EnemyStunned()
     {
         stateManager.setState(EnemyState.STUNNED);
-        yield return new WaitForSeconds(stunDuration );
+        yield return new WaitForSecondsRealtime(stunDuration);
 		enemyLight.intensity = 0.5f;
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSecondsRealtime(0.2f);
 		enemyLight.intensity = 0.75f;
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSecondsRealtime(0.2f);
 		enemyLight.intensity = 0.5f;
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSecondsRealtime(0.2f);
 		enemyLight.intensity = 0.25f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSecondsRealtime(0.2f);
         enemyLight.intensity = 0.7f;
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSecondsRealtime(0.4f);
 		stateManager.setState(EnemyState.PATROLLING);
         enemyLight.intensity = 1;
     }

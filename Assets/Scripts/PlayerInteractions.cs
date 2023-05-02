@@ -50,6 +50,6 @@ public class PlayerInteractions : MonoBehaviour
 
     IEnumerator waitForTimeCustom(float seconds)
     {
-        yield return new WaitForSeconds(seconds);
+        yield return new WaitForSecondsRealtime(seconds);
     }
 }
