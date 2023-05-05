@@ -83,29 +83,37 @@ public class EnemyPatrol : MonoBehaviour
             //Debug.Log("Detected Stun State");
             enemyLight.intensity = Mathf.Lerp(enemyLight.intensity, 0.2f, 0.01f);
         }
+        else if (state == EnemyState.STOPPED)
+        {
+            Debug.Log("Stopped");
+        }
     }
 
     IEnumerator NextTargetLocation()
     {
-        stateManager.setState(EnemyState.STOPPED);
-
-        if (currentDestPoint < points.Length - 1)
+        if (stateManager.getState() != EnemyState.STUNNED)
         {
-            currentDestPoint++;
+            stateManager.setState(EnemyState.STOPPED);
+
+            if (currentDestPoint < points.Length - 1)
+            {
+                currentDestPoint++;
+            }
+            else if (currentDestPoint == points.Length - 1)
+            {
+                currentDestPoint = 0;
+            }
+            else
+            {
+                yield break;
+            }
+
+            stateManager.setState(EnemyState.PATROLLING);
         }
-        else if (currentDestPoint == points.Length - 1) 
+        else 
         {
-            currentDestPoint = 0;
+            
         }
-        else
-        {
-            yield break;
-        }
-
-        yield return new WaitForSecondsRealtime(timeDelay);
-
-        stateManager.setState(EnemyState.PATROLLING);
-
     }
     
     public IEnumerator EnemyStunned()

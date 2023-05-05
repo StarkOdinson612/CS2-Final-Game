@@ -38,7 +38,7 @@ public class PlayerShoot : MonoBehaviour
         {
 			if (shots == 0) { return; }
 
-			shots--;
+			// shots--;
 
 			List<RaycastHit2D> hits = new List<RaycastHit2D>();
 			for (float angle = -shootAngle; angle <= shootAngle; angle += 8)
