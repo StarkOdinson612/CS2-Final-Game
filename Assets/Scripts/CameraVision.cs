@@ -42,14 +42,14 @@ public class CameraVision : MonoBehaviour
             Vector3 vec = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
             Debug.DrawRay(origin.position, transform.localRotation * vec.normalized * sightDist, Color.cyan, 0.01f);
 
-            hits.Add(Physics2D.Raycast(origin.position, transform.rotation * vec.normalized, 7, playerMask));
+            hits.Add(Physics2D.Raycast(origin.position, transform.localRotation * vec.normalized, 7, playerMask));
         }
 
         hits = hits.Where(hit => hit.collider != null && hit.collider.gameObject.CompareTag("Player")).ToList();
 
         if (hits.Count > 0)
         {
-            // Debug.Log(hits[0].collider.gameObject);
+            Debug.Log(hits[0].collider.gameObject);
             if (state != CameraState.CAUGHT_PLAYER) { stateManager.setState(CameraState.DISCOVERED_PLAYER); }
             stateManager.setPlayerPos(hits[0].collider.gameObject.transform);
 
