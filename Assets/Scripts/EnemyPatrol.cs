@@ -1,5 +1,7 @@
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -18,14 +20,13 @@ public class EnemyPatrol : MonoBehaviour
 
     public float timeDelay = 1f;
 
-    [SerializeField]
-    private float moveSpeed = 1.5f;
+    public float moveSpeed = 1.5f;
 
     public float stunDuration = 7;
 
-    private float rotationZ;
-
     private Rigidbody2D rb;
+
+    public float followSpeed = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +77,7 @@ public class EnemyPatrol : MonoBehaviour
 			float dirAngle = GetAngleFromVectorFloat(stateManager.getPlayerPos().position - transform.position);
 
 			Quaternion rotDir = Quaternion.Euler(new Vector3(0, 0, dirAngle - transform.rotation.z - 90));
-			transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, 1 * Time.deltaTime);
+			transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, followSpeed * Time.deltaTime);
 		}
         else if (state == EnemyState.STUNNED)
         {
@@ -87,6 +88,11 @@ public class EnemyPatrol : MonoBehaviour
         {
             Debug.Log("Stopped");
         }
+    }
+
+    public void toggleFollowSpeed()
+    {
+        followSpeed = 4;
     }
 
     IEnumerator NextTargetLocation()
@@ -115,9 +121,12 @@ public class EnemyPatrol : MonoBehaviour
             
         }
     }
+
+    public void setEnemyLight(float intensity) { enemyLight.intensity = intensity; }
     
     public IEnumerator EnemyStunned()
     {
+        if (stateManager.getState() == EnemyState.CAUGHT_PLAYER) { yield break; }
         stateManager.setState(EnemyState.STUNNED);
         yield return new WaitForSecondsRealtime(stunDuration);
 		enemyLight.intensity = 0.5f;

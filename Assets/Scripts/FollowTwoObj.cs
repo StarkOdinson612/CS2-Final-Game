@@ -18,7 +18,8 @@ public class FollowTwoObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        boltScript.StartObject = obj;
+		if (Time.timeScale == 0) { return; }
+		boltScript.StartObject = obj;
         boltScript.EndObject = target;
     }
 }
