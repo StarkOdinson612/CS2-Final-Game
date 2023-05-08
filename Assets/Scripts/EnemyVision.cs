@@ -12,10 +12,13 @@ public class EnemyVision : MonoBehaviour
 
     private float sightDist = 6.8f;
 
-    public float hangTime = 7f;
+    private float hangTime = 2f;
+
+    public float ang;
 
     [SerializeField]
     private LayerMask playerMask;
+    private GameManager gameManager;
 
     int viewCounter;
 
@@ -25,7 +28,8 @@ public class EnemyVision : MonoBehaviour
         stateManager = GetComponentInParent<EnemyStateManager>();
         thisCollider = GetComponentInParent<Collider2D>();
         playerMask = LayerMask.GetMask("Player", "Default");
-    }
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+	}
 
     // Update is called once per frame
     void Update()
@@ -35,9 +39,10 @@ public class EnemyVision : MonoBehaviour
 
 	void FixedUpdate()
     {
-        EnemyState state = stateManager.getState();
+		if (Time.timeScale == 0) { return; }
+		EnemyState state = stateManager.getState();
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
-        for (float angle = -20f; angle <= 20f; angle += 4)
+        for (float angle = -ang; angle <= ang; angle += ang / 10)
         {
             Vector3 vec = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
             Debug.DrawRay(transform.position, transform.rotation * vec.normalized * sightDist, Color.cyan, 0.01f);
@@ -49,19 +54,30 @@ public class EnemyVision : MonoBehaviour
 
         if (hits.Count > 0)
         {
+            EnemyPatrol patrolScript = GetComponent<EnemyPatrol>();
             // Debug.Log(hits[0].collider.gameObject);
             if (state != EnemyState.CAUGHT_PLAYER && state != EnemyState.STUNNED) { stateManager.setState(EnemyState.DISCOVERED_PLAYER); }
 			stateManager.setPlayerPos(hits[0].collider.gameObject.transform);
 
             if (state != EnemyState.STUNNED) { viewCounter++; }
-			// Debug.Log(viewCounter / 60);
+            // Debug.Log(viewCounter / 60);
 
-			if (viewCounter / 60 > 3)
+            if (state != EnemyState.CAUGHT_PLAYER) { 
+                patrolScript.setEnemyLight(1 + 0.5f * (viewCounter / 120.0f));
+                gameManager.setDangerFill(viewCounter / 120f);
+            }
+
+			if (viewCounter / 60f > hangTime)
 			{
 				stateManager.setState(EnemyState.CAUGHT_PLAYER);
+                patrolScript.toggleFollowSpeed();
 			}
 		}
-		else { viewCounter = 0; if (state != EnemyState.CAUGHT_PLAYER && state != EnemyState.STUNNED) { stateManager.setState(EnemyState.PATROLLING); } }
+		else { 
+            viewCounter = 0; 
+            if (state != EnemyState.CAUGHT_PLAYER && state != EnemyState.STUNNED) { stateManager.setState(EnemyState.PATROLLING); } 
+            
+        }
 	}
 
     public Vector3 DirFromAngle(float angleInDegree, bool angleIsGlobal)

@@ -20,7 +20,8 @@ public class PlayerInteractions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (keyCardUIParent.active)
+		if (Time.timeScale == 0) { return; }
+		if (keyCardUIParent.active)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {

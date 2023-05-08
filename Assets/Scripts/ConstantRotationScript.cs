@@ -13,6 +13,7 @@ public class ConstantRotationScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = Quaternion.identity;
+		if (Time.timeScale == 0) { return; }
+		transform.rotation = Quaternion.identity;
     }
 }
