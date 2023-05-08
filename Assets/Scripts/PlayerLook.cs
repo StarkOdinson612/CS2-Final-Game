@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerLook : MonoBehaviour
 {
@@ -9,16 +11,20 @@ public class PlayerLook : MonoBehaviour
 
     private Animator playerAnimator;
 
+    private GameManager gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
-    {
+    { 
+        if (Time.timeScale == 0) { return; }
         Vector3 mousePos = new Vector3(cam.ScreenToWorldPoint(Input.mousePosition).x, cam.ScreenToWorldPoint(Input.mousePosition).y, 0);
         Vector3 shootDir = mousePos - new Vector3(transform.position.x, transform.position.y, 0);
 

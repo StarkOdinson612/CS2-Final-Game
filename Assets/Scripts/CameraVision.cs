@@ -11,9 +11,15 @@ public class CameraVision : MonoBehaviour
 
     private float sightDist = 6.8f;
 
-    public float hangTime = 7f;
+    public float hangTime = 3f;
 
-    [SerializeField]
+	public UnityEngine.Rendering.Universal.Light2D enemyLight;
+
+    private GameManager gameManager;
+
+
+
+	[SerializeField]
     private LayerMask playerMask;
 
     public Transform origin;
@@ -25,6 +31,7 @@ public class CameraVision : MonoBehaviour
     {
         stateManager = GetComponentInParent<CameraStateManager>();
         playerMask = LayerMask.GetMask("Player", "Default");
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -35,7 +42,8 @@ public class CameraVision : MonoBehaviour
 
     void FixedUpdate()
     {
-        CameraState state = stateManager.getState();
+		if (Time.timeScale == 0) { return; }
+		CameraState state = stateManager.getState();
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
         for (float angle = -20f; angle <= 20f; angle += 4)
         {
@@ -45,23 +53,36 @@ public class CameraVision : MonoBehaviour
             hits.Add(Physics2D.Raycast(origin.position, transform.localRotation * vec.normalized, 7, playerMask));
         }
 
+  
+
         hits = hits.Where(hit => hit.collider != null && hit.collider.gameObject.CompareTag("Player")).ToList();
 
         if (hits.Count > 0)
-        {
-            Debug.Log(hits[0].collider.gameObject);
+        { 
             if (state != CameraState.CAUGHT_PLAYER) { stateManager.setState(CameraState.DISCOVERED_PLAYER); }
             stateManager.setPlayerPos(hits[0].collider.gameObject.transform);
 
             viewCounter++; 
-            // Debug.Log(viewCounter / 60);
+            Debug.Log(viewCounter / 60);
 
-            if (viewCounter / 60 > 3)
+			if (state != CameraState.CAUGHT_PLAYER) { 
+                setEnemyLight(1 + 0.5f * (viewCounter / 180.0f));
+                gameManager.setDangerFill(viewCounter / 180f);
+            }
+
+			if (viewCounter / 60f > hangTime)
             {
                 stateManager.setState(CameraState.CAUGHT_PLAYER);
+                GetComponent<CameraPatrol>().toggleFollowSpeed();
             }
         }
-        else { viewCounter = 0; if (state != CameraState.CAUGHT_PLAYER) { stateManager.setState(CameraState.PATROLLING); } }
+        else { 
+            viewCounter = 0;
+            if (state != CameraState.CAUGHT_PLAYER) 
+            { 
+                stateManager.setState(CameraState.PATROLLING);
+            } 
+        }
     }
 
     public Vector3 DirFromAngle(float angleInDegree, bool angleIsGlobal)
@@ -73,6 +94,8 @@ public class CameraVision : MonoBehaviour
 
         return new Vector3(Mathf.Cos(angleInDegree * Mathf.Deg2Rad), Mathf.Sin(angleInDegree * Mathf.Deg2Rad), 0);
     }
+
+	public void setEnemyLight(float intensity) { enemyLight.intensity = intensity; }
 
 
 }

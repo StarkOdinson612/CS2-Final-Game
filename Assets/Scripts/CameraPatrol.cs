@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ public class CameraPatrol : MonoBehaviour
 {
     private CameraStateManager stateManager;
 
+    public bool isRotating;
+
     [SerializeField]
     private float targetPoint;
 
@@ -13,46 +16,79 @@ public class CameraPatrol : MonoBehaviour
 
     public float angle;
 
+    private float followSpeed = 1;
+
     // Start is called before the first frame update
     void Start()
     {
         stateManager = GetComponent<CameraStateManager>();
 
         targetPoint = angle;
+        
+        if (!isRotating)
+        {
+            angle = 0;
+            targetPoint = 0;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        CameraState state = stateManager.getState();
+		if (Time.timeScale == 0) { return; }
+		CameraState state = stateManager.getState();
         if (state == CameraState.PATROLLING)
         {
-            if (targetPoint == angle)
+            if (isRotating)
             {
-                transform.rotation = Quaternion.Euler(0, 0, transform.localEulerAngles.z + 1 * speed);
 
-                if (transform.localEulerAngles.z >= (angle - 0.5f) && transform.localEulerAngles.z <= 180)
+                if (targetPoint == angle)
                 {
-                    targetPoint = 360 - angle;
+                    transform.rotation = Quaternion.Euler(0, 0, transform.localEulerAngles.z + 1 * speed);
+
+                    if (transform.localEulerAngles.z >= (angle - 0.5f) && transform.localEulerAngles.z <= 180)
+                    {
+
+                        targetPoint = 360 - angle;
+                    }
+                }
+                else if (targetPoint == 360 - angle)
+                {
+                    transform.rotation = Quaternion.Euler(0, 0, transform.localEulerAngles.z - 1 * speed);
+
+                    if (transform.localEulerAngles.z <= (360 - angle) - 0.5f && transform.localEulerAngles.z >= 180)
+                    {
+
+                        targetPoint = angle;
+                    }
                 }
             }
-            else if (targetPoint == 360 - angle)
+            else
             {
-                transform.rotation = Quaternion.Euler(0, 0, transform.localEulerAngles.z - 0.09f);
-
-                if (transform.localEulerAngles.z <= (360 - angle) - 0.5f && transform.localEulerAngles.z >= 180)
+                if (transform.eulerAngles.z >= 0.5f && transform.eulerAngles.z < 180)
                 {
-                    targetPoint = angle;
-                }
-            }
+					transform.rotation = Quaternion.Euler(0, 0, transform.localEulerAngles.z - 1 * speed);
+				}
+                else if (transform.eulerAngles.z <= 359.5f && transform.eulerAngles.z > 180)
+                {
+					transform.rotation = Quaternion.Euler(0, 0, transform.localEulerAngles.z + 1 * speed);
+				}
+
+			}
+            
         }
         else if (state == CameraState.DISCOVERED_PLAYER || state == CameraState.CAUGHT_PLAYER)
         {
             float dirAngle = GetAngleFromVectorFloat(stateManager.getPlayerPos().position - transform.position);
 
-            Quaternion rotDir = Quaternion.Euler(new Vector3(0, 0, dirAngle - transform.rotation.z - 90));
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, 1 * Time.deltaTime);
+            Quaternion rotDir = Quaternion.Euler(new Vector3(0, 0, dirAngle - transform.rotation.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotDir, followSpeed * Time.deltaTime);
         }
+    }
+
+    public void toggleFollowSpeed()
+    {
+        followSpeed = 4;
     }
 
 
